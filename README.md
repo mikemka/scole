@@ -1,4 +1,4 @@
-<p align="center"><img src="www/static/logo.svg"></p>
+
 
 # Scole
 ### Электронный журнал общеобразовательной организации

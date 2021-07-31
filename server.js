@@ -171,7 +171,7 @@ https.createServer(httpsOpt, (zapros, otvet) => {
    // Если метод GET, просто отдаем запрошенный статический файл
    else if (zapros.method == "GET")
       fs.readFile(DOCROOT + pathname, function(err, cont) {
-         let mtip = MIME[pathname.split(".")[1]];      
+         let mtip = MIME[pathname.split(".").pop()];    
          if (!mtip || err) {
             sendOtvet(otvet, 404, "text/html", ERR404);
             putlog(ADDR, "GET", pathname, 404, ERR404.length);

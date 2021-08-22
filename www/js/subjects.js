@@ -127,6 +127,11 @@ createSection("subjects", `
 getContent.subjects = async () => {
    let apiResp = await apireq("subjList");
    let subjListDop = JSON.parse(apiResp);
+   
+   // Оставляем собственно предметы, убираем межклассные группы
+   for (let kod of Object.keys(subjListDop))
+      if (kod[0] != 's' && kod[0] != 'd') delete subjListDop[kod];
+
    subjList = {...subjDef, ...subjListDop};
    sbListPubl(subjList);
 }

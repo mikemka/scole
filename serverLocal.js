@@ -10,7 +10,7 @@
 const DOCROOT   = __dirname + "/www/",
       http      = require("http"),
       fs        = require("fs"),
-      nedb      = require("nedb"),
+      nedb      = require("@yetzt/nedb"),
       {
          PORT, SERVER, ERR404, MIME, PWD, SALT, SALTPIN,
          ADMIN, KEYPATH, CERTPATH, CAPATH

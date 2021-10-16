@@ -55,6 +55,7 @@ module.exports = async (argsObj) => {
       }
 
       // Если редактируется отм. за прошлый учебный период, проверяем PIN-код
+      // (при этом текущую дату уменьшаем на один месяц)
       const dtf = d => d.toString().padStart(2, '0');
       let now   = new Date(),
           dtD   = dtf(now.getDate()),
@@ -64,6 +65,9 @@ module.exports = async (argsObj) => {
           dtOtm = d.substr(0,4),
           dtCur = lib.dtConv(`${dtY}-${dtM}-${dtD}`);
       dtCur = dtCur.length > 4 ? "d999" : dtCur;
+      let mesyac    = Number(dtCur[1]),
+          newMesyac = !mesyac ? 0 : mesyac - 1;
+      dtCur = `d${newMesyac}${dtCur.slice(2)}`;
       
       if ((lib.whereIs(dtCur) > lib.whereIs(dtOtm))) {
          let clas = c.split('-')[0],

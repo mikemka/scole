@@ -11,6 +11,23 @@ const regWarn = "Тема не указана. Новая колонка не б
    + "имеющаяся колонка и все отметки будут удалены.\n\nВы уверены?";
 
 // **************************************************************************
+// Проверка, есть ли на дату dt (вида d125) справка у ребенка pupil, используя 
+// spravkiObj = {
+//    ivanov: [["2019-09-02", "2019-09-13"], ...],
+//    petrov: ...
+// }
+// (глобальный) который загружается с помощью функции API sprResp
+// перед тем, как вызывается функция spravkiObj
+let spravkiObj = {};
+const sprExist = (dt, pupil) => {
+   if (dt.length > 4)      return false;
+   if (!spravkiObj[pupil]) return false;
+   for (let spr of spravkiObj[pupil]) 
+      if (dt >= dateConv(spr[0]) && dt <= dateConv(spr[1])) return true;
+   return false;
+}
+
+// **************************************************************************
 // Формирование списка журальных страничек в селекте выбора странички
 // (показываем также список журнальных страничек всех подгрупп данного класса)
 const regPagesSelLoad = async (className) => {
@@ -339,7 +356,7 @@ const sendGr = async (id, gradeOld, gradeNew, toDown) => {
    }
    
    if (gradeOld != gradeNew) {
-      
+
       inpElem.style.background = "#f99";
       
       // Отправляем отметку с помощью API
@@ -363,8 +380,10 @@ const sendGr = async (id, gradeOld, gradeNew, toDown) => {
    // Обновляем ячейку
    inpElem.style.background = "none";
    let cnt = gradeNew ? gradeNew : ' ';
-   idElem.outerHTML =
-      `<td id="${id}" onClick="td2inp('${id}', '${gradeNew}')">${cnt}</td>`;
+   let [idDt, idNum] = id.split('-'), pupil = crGrObj.puList[idNum];
+   let bcgrColor = sprExist(idDt, pupil) ? `style="background:#efe"` : '';
+   idElem.outerHTML = `<td id="${id}"${bcgrColor} `
+                    + `onClick="td2inp('${id}', '${gradeNew}')">${cnt}</td>`;
       
    // Обновляем объект crGrObj (gradesObj или vdGradesObj для внеурочки)
    if (!crGrObj[dt])
@@ -427,7 +446,7 @@ const gradesGet = async (className, subjCode, teachLgn) => {
 // **************************************************************************
 // Показ списка детей и отметок на странице
 // (из объекта gradesObj или vdGradesObj для внеурочной деятельности)
-const gradesShow = vneur => {
+const gradesShow = async vneur => {
    if (!vneur) vneur = 0;
    let crGradObj = vneur ? vdGradesObj      : gradesObj,
        crTopiObj = vneur ? vdTopicsObj      : topicsObj,
@@ -454,6 +473,17 @@ const gradesShow = vneur => {
                   + `${n}. ${pupCl}${pipFio}</td></tr>`;
       }
       content += "</table>";
+
+      // Загружаем глобальный объект со справками spravkiObj
+      // (используется для перекрашивания фона ячейки, если есть справка)
+      // Для межклассных внеурочных групп ничего не перекрашиваем
+      if (vneur) spravkiObj = {};
+      else {
+         let className = dqs("#regClassSel").value;
+         let sprResp = await apireq("sprResp", [className, '']);
+         if (sprResp != "none") spravkiObj = JSON.parse(sprResp);
+         else spravkiObj = {};
+      }
       
       // Отметки
       content += "<div>";
@@ -487,7 +517,9 @@ const gradesShow = vneur => {
             if (crGradObj[dt]) if (crGradObj[dt][i]) gr = crGradObj[dt][i];
             if (!gr) gr = ' ';
             let grA = gr.replace("&nbsp;", '').replace(" ", '');
-            content += `<tr><td id="${dt}-${i}" `
+            let pup = crGradObj.puList[i];
+            let bcgrColor = sprExist(dt, pup) ? `style="background:#efe"` : '';
+            content += `<tr><td id="${dt}-${i}"${bcgrColor} `
                + `onClick="td2inp('${dt}-${i}', '${grA}')">${gr}</td></tr>`;
          }
          content += "</table>";

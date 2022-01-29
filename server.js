@@ -120,7 +120,8 @@ global.hash = (str, slt) => {
 const sendOtvet = (otvet, kod, contType, content) => {
    otvet.writeHead(kod, {
       "Content-Type": contType, "Server": SERVER,
-      "Strict-Transport-Security": "max-age=32000000"
+      "Strict-Transport-Security": "max-age=32000000",
+      "Access-Control-Allow-Origin": "*"
    });
    otvet.end(content);
 }
@@ -163,8 +164,11 @@ https.createServer(httpsOpt, (zapros, otvet) => {
       captchaIdArr = captchaIdArr.filter(
          x => Number(x) > Number(tm - CAPTDEATH * 1000));
       captchaIdArr.push(tm);
-      otvet.writeHead(200,
-         {"Content-Type": "image/png", "Server": SERVER, "X-Cpt": tm});
+      otvet.writeHead(200, {
+         "Content-Type": "image/png", "Server": SERVER, "X-Cpt": tm,
+         "Access-Control-Allow-Origin": "*",
+         "Access-Control-Expose-Headers": "X-Cpt"
+      });
       otvet.end(captGen(captNumGen(tm), captOpt));
    }
    

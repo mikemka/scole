@@ -381,7 +381,7 @@ const sendGr = async (id, gradeOld, gradeNew, toDown) => {
    inpElem.style.background = "none";
    let cnt = gradeNew ? gradeNew : ' ';
    let [idDt, idNum] = id.split('-'), pupil = crGrObj.puList[idNum];
-   let bcgrColor = sprExist(idDt, pupil) ? `style="background:#efe"` : '';
+   let bcgrColor = sprExist(idDt, pupil) ? `style="background:#dfd"` : '';
    idElem.outerHTML = `<td id="${id}"${bcgrColor} `
                     + `onClick="td2inp('${id}', '${gradeNew}')">${cnt}</td>`;
       
@@ -518,7 +518,7 @@ const gradesShow = async vneur => {
             if (!gr) gr = ' ';
             let grA = gr.replace("&nbsp;", '').replace(" ", '');
             let pup = crGradObj.puList[i];
-            let bcgrColor = sprExist(dt, pup) ? `style="background:#efe"` : '';
+            let bcgrColor = sprExist(dt, pup) ? `style="background:#dfd"` : '';
             content += `<tr><td id="${dt}-${i}"${bcgrColor} `
                + `onClick="td2inp('${dt}-${i}', '${grA}')">${gr}</td></tr>`;
          }

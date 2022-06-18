@@ -65,10 +65,12 @@ module.exports = async (argArr) => {
       let PERS = Object.keys(INI.dtsIt).sort().map(x => [x, INI.dtsIt[x][0]]);
 
       // Объект с кодами (ключи) и краткими названиями учебных предметов
-      let SBFULL = Object.fromEntries([
+      let SBFULL = {};
+      for (let x of [
          ...Object.entries(INI.sbDef),
          ...Object.entries(JSON.parse(await SB()))
-      ]);
+      ]) SBFULL[x[0]] = x[1];
+
       for (let [k, sb] of Object.entries(SBFULL))
          SBFULL[k] = sb.replace(/[().\-]/g, '').split(' ')
                    . map(x => x.substr(0,4)).join('_')

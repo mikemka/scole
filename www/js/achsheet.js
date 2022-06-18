@@ -99,6 +99,32 @@ const achPupListShow = async () => {
       dqs("#achSelPupil").innerHTML = '';
       dqs("#tabel").innerHTML = "<h3>В этом классе нет учащихся</h3>";
    }
+   genButtonTabelAll(); // Показываем кнопку генер. табеля всего класса
+}
+
+// Подстановка кнопки для генерирования табеля класса в соотв. div
+const genButtonTabelAll = () => {
+   dqs("#tabelAllClass").innerHTML =
+      "<button type='button' onclick='tabGenAllClass()'>"
+    + "Табель всего класса</button>";
+}
+
+// Запрос и формирование ссылки на скачивание табеля всего класса
+const tabGenAllClass = async () => {
+   dqs("#tabelAllClass").innerHTML = "<p>Табель генерируется, ждите...</p>";
+   let clName = dqs("#achSelClass").value;
+   let apiResp = await apireq("tabelGenAll", [clName]);
+   if (apiResp != "none") {
+      let dataLink = new Blob([apiResp], {type: "text/csv"}),
+                hr = window.URL.createObjectURL(dataLink);
+      dqs("#tabelAllClass").innerHTML = 
+         `<a href="${hr}" download='tabel${clName}.csv'>`
+       + `Скачать табель всего ${clName}</a>`;
+   }
+   else {
+      dqs("#tabelAllClass").innerHTML = "<p>Не удалось получить табель</p>";
+      return;
+   }
 }
 
 // Формирование контента страницы
@@ -106,6 +132,7 @@ createSection("achsheet", `
    <select id="achSelClass" onChange="achPupListShow()"></select>
    <select id="achSelPupil" onChange="achShow(this.value)"></select>
    <div id="tabel" style="margin-top:20px"></div>
+   <div id="tabelAllClass" style="margin-top:20px"></div>
 `);
 
 // Динамически подгружаем контент страницы (имя метода = имени пункта меню!)
@@ -133,13 +160,15 @@ getContent.achsheet = async () => {
       let achAllClasses = classSort(JSON.parse(apiResp));
       for (let cl of achAllClasses) selClassInner += `<option>${cl}</option>`;
       dqs("#achSelClass").innerHTML = selClassInner;
-      achPupListShow(); // показываем список детей
+      achPupListShow();    // показываем список детей
+      genButtonTabelAll(); // Показываем кнопку генер. табеля всего класса
    }
    // Если он классный руководитель, показываем ему его классы
    else if (achRole == "tutor") {
       for (let cl of uTutorCls) selClassInner += `<option>${cl}</option>`;
       dqs("#achSelClass").innerHTML = selClassInner;
-      achPupListShow(); // показываем список детей
+      achPupListShow();    // показываем список детей
+      genButtonTabelAll(); // Показываем кнопку генер. табеля всего класса
    }
    dqs("#tabel").innerHTML = '';
 };

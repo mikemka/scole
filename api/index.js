@@ -27,7 +27,7 @@ const modReq = {
    "export":         [1,1], "notesAdd":       [1,1], "notesGet":      [1,1],
    "notesDel":       [1,1], "logGet":         [1,1], "notesCheck":    [1,1],
    "statGet":        [1,1], "interGroupPup":  [1,1], "interGroupGet": [1,1],
-   "attendGet":      [1,1], "electGet":       [1,1]
+   "attendGet":      [1,1], "electGet":       [1,1], "tabelGenAll":   [1,1]
 };
 let mod = {};
 mod.auth = require("./auth");
@@ -45,7 +45,7 @@ const RIGHTS = {
       "distrGet", "distrEdit", "classesGroups", "topicsGet", "gradesGet",
       "absentGet", "pupilsList", "sprResp", "export", "notesAdd", "notesGet",
       "notesDel", "logGet", "statGet", "interGroupEdit", "interGroupList",
-      "interGroupDel", "attendGet", "tabelGet"
+      "interGroupDel", "attendGet", "tabelGet", "tabelGenAll"
    ],
    "teacher": [
       "usChPwd", "subjList", "topicEdit", "topicsGet", "gradesGet", "gradeAdd",
@@ -57,7 +57,7 @@ const RIGHTS = {
       "gradesGet", "subgrEdit", "subgrPups", "parCodes", "absentGet",
       "pupilsList", "sprAdd", "sprGet", "sprDel", "sprResp", "tabelGet",
       "export", "notesAdd", "notesGet", "notesDel", "logGet", "attendGet",
-      "interGroupList", "electGet"
+      "interGroupList", "electGet", "tabelGenAll"
    ],
    "pupil":   [
       "subjList", "teachList", "jrnGet", "absentGet", "sprGet", "sprResp",
@@ -97,7 +97,7 @@ module.exports = async (post, addr) => {
       "topicEdit", "gradeAdd", "subgrEdit", "subgrPups", "parCodes", "jrnGet",
       "absentGet", "sprAdd", "sprGet", "sprDel", "sprResp", "tabelGet",
       "export", "notesAdd", "notesGet", "notesDel", "logGet", "statGet",
-      "interGroupPup", "attendGet", "electGet"
+      "interGroupPup", "attendGet", "electGet", "tabelGenAll"
    ];
    if (fNames.includes(postDt.f) && postDt.z) postDt.z.push(postDt.l);
       

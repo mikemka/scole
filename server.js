@@ -207,7 +207,7 @@ https.createServer(httpsOpt, (zapros, otvet) => {
             "usAddEdit", "usImport", "usSetAdmin", "usBlock", "usChPwd",
             "tutorSet", "distrEdit", "topicEdit", "gradeAdd", "subgrEdit",
             "subgrPups", "sprAdd", "sprDel", "notesAdd", "notesDel",
-            "interGroupEdit", "interGroupDel", "interGroupPup"
+            "interGroupEdit", "interGroupDel", "interGroupPup", "tabelGenAll"
          ];
          try {
             let postDataObj = JSON.parse(postData);

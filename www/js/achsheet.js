@@ -110,12 +110,13 @@ const genButtonTabelAll = () => {
 }
 
 // Запрос и формирование ссылки на скачивание табеля всего класса
+// (отдается в кодировке windows-1251)
 const tabGenAllClass = async () => {
    dqs("#tabelAllClass").innerHTML = "<p>Табель генерируется, ждите...</p>";
    let clName = dqs("#achSelClass").value;
    let apiResp = await apireq("tabelGenAll", [clName]);
    if (apiResp != "none") {
-      let dataLink = new Blob([apiResp], {type: "text/csv"}),
+      let dataLink = new Blob([utf8to1251(apiResp)], {type: "text/csv"}),
                 hr = window.URL.createObjectURL(dataLink);
       dqs("#tabelAllClass").innerHTML = 
          `<a href="${hr}" download='tabel${clName}.csv'>`

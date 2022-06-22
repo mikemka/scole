@@ -1,7 +1,7 @@
 /**
  *   ЭЛЕКТРОННЫЙ ЖУРНАЛ «ШКАЛА»:
  *   БИБЛИОТЕКА ФУНКЦИЙ ДЛЯ СТРАНИЦ С ОТМЕТКАМИ И ТЕМАМИ УРОКОВ
- *   Copyright © 2021, А.М.Гольдин. Modified BSD License
+ *   Copyright © 2022, А.М.Гольдин. Modified BSD License
  * 
  *   Библиотека используется скриптом register.js
  */
@@ -276,6 +276,12 @@ const topicsShow = vneur => {
          content += `<p><b onClick="dtFocus('${dt}', ${vneur})">`
                   + `${dateConv(dt)}</b> ${ctObj[dt].t}${vol}${dz}</p>`;
       }
+      // Вычисляем и публикуем итоговое количество проведенных часов
+      let itogoChasov = 0;
+      for (let top of Object.values(ctObj))
+         itogoChasov += top.v ? top.v : 1;
+      content += `<p style="font-size: 110%">`
+               + `<b>Итого часов:</b> ${itogoChasov}</p>`;
    }
    let topicNode = vneur ? dqs("#vdJustTopics") : dqs("#regJustTopics"),
           dtNode = vneur ? dqs("#vdTopDt")      : dqs("#regTopDt");

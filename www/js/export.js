@@ -39,8 +39,12 @@ const getExpFile = async () => {
       // Заменяем код даты на собственно дату
       for (let j=0; j<expObj.content[i].l.length; j++) {
          let dtCode = (expObj.content[i].l)[j].d;
-         let dt = (dtCode.length == 4) ?
-            dateConv(dtCode) : `<b>${DTSIT[dtCode][0]}</b>`;
+         let dt;
+         if (dtCode.length == 4) dt = dateConv(dtCode);
+         else {
+            if (DTSIT[dtCode]) dt = `<b>${DTSIT[dtCode][0]}</b>`;
+            else dt = `<b>${dateConv(dtCode.slice(0,4))}</b>`;
+         }
          (expObj.content[i].l)[j].d = dt;
       }
    }
